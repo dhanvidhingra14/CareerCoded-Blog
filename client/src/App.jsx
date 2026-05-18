@@ -23,7 +23,6 @@ function App() {
       setBlogs(res.data);
     } catch (error) {
       alert("Failed to fetch blogs");
-      console.log(error);
     }
   };
 
@@ -39,6 +38,11 @@ function App() {
   };
 
   const createBlog = async () => {
+    if (!blogData.title || !blogData.description || !blogData.content || !blogData.author || !blogData.category) {
+      alert("Please fill all required fields");
+      return;
+    }
+
     try {
       const newBlog = {
         ...blogData,
@@ -62,37 +66,42 @@ function App() {
       getBlogs();
     } catch (error) {
       alert("Blog creation failed");
-      console.log(error);
     }
   };
 
   return (
     <div className="app">
       <nav className="navbar">
-        <h1>CareerCoded Blog Platform</h1>
-        <p>MERN Stack Internship Project</p>
+        <div>
+          <h1>CareerCoded Blogs</h1>
+          <p>MERN Stack Blog Management Platform</p>
+        </div>
+        <div className="nav-links">
+          <a href="#create">Create Blog</a>
+          <a href="#blogs">All Blogs</a>
+        </div>
       </nav>
 
-      <section className="form-section">
+      <header className="hero">
+        <h2>Manage and Explore Career Blogs</h2>
+        <p>Create, update, delete, and like blogs using a full stack MERN application.</p>
+      </header>
+
+      <section className="form-section" id="create">
         <h2>Create Blog</h2>
 
         <div className="form-grid">
-          <input name="title" placeholder="Blog Title" value={blogData.title} onChange={handleChange} />
-
-          <input name="thumbnail" placeholder="Thumbnail URL" value={blogData.thumbnail} onChange={handleChange} />
-
-          <input name="description" placeholder="Short Description" value={blogData.description} onChange={handleChange} />
-
-          <input name="author" placeholder="Author Name" value={blogData.author} onChange={handleChange} />
-
-          <input name="category" placeholder="Category" value={blogData.category} onChange={handleChange} />
-
+          <input name="title" placeholder="Blog Title *" value={blogData.title} onChange={handleChange} />
+          <input name="thumbnail" placeholder="Thumbnail Image URL" value={blogData.thumbnail} onChange={handleChange} />
+          <input name="description" placeholder="Short Description *" value={blogData.description} onChange={handleChange} />
+          <input name="author" placeholder="Author Name *" value={blogData.author} onChange={handleChange} />
+          <input name="category" placeholder="Category *" value={blogData.category} onChange={handleChange} />
           <input name="tags" placeholder="Tags e.g. tech,coding" value={blogData.tags} onChange={handleChange} />
         </div>
 
         <textarea
           name="content"
-          placeholder="Write blog content..."
+          placeholder="Write blog content *"
           value={blogData.content}
           onChange={handleChange}
         ></textarea>
@@ -102,86 +111,101 @@ function App() {
         </button>
       </section>
 
-      <section className="blogs-section">
+      <section className="blogs-section" id="blogs">
         <h2>All Blogs</h2>
 
-        <div className="blogs-grid">
-          {blogs.map((blog) => (
-            <div className="blog-card" key={blog._id}>
-              {blog.thumbnail && <img src={blog.thumbnail} alt={blog.title} />}
+        {blogs.length === 0 ? (
+          <p className="empty-text">No blogs available. Create your first blog.</p>
+        ) : (
+          <div className="blogs-grid">
+            {blogs.map((blog) => (
+              <div className="blog-card" key={blog._id}>
+                <img
+                  src={blog.thumbnail || "https://via.placeholder.com/500x300?text=CareerCoded+Blog"}
+                  alt={blog.title}
+                />
 
-              <h3>{blog.title}</h3>
-              <p className="description">{blog.description}</p>
-              <p>{blog.content}</p>
+                <div className="card-content">
+                  <span className="category">{blog.category}</span>
 
-              <div className="blog-info">
-                <span>Author: {blog.author}</span>
-                <span>Category: {blog.category}</span>
-                <span>Likes: {blog.likes.length}</span>
+                  <h3>{blog.title}</h3>
+
+                  <p className="description">{blog.description}</p>
+
+                  <p className="content">{blog.content}</p>
+
+                  <div className="blog-info">
+                    <span>Author: {blog.author}</span>
+                    <span>Likes: {blog.likes.length}</span>
+                  </div>
+
+                  <div className="buttons">
+                    <button
+                      className="like-btn"
+                      onClick={async () => {
+                        const userId = prompt("Enter your User ID");
+
+                        try {
+                          await axios.put(`${API_URL}/blogs/${blog._id}/like`, {
+                            userId
+                          });
+
+                          getBlogs();
+                        } catch (error) {
+                          alert("Like failed");
+                        }
+                      }}
+                    >
+                      Like
+                    </button>
+
+                    <button
+                      className="update-btn"
+                      onClick={async () => {
+                        const newTitle = prompt("Enter new title");
+                        const newDescription = prompt("Enter new description");
+
+                        try {
+                          await axios.put(`${API_URL}/blogs/${blog._id}`, {
+                            title: newTitle,
+                            description: newDescription
+                          });
+
+                          alert("Blog Updated");
+                          getBlogs();
+                        } catch (error) {
+                          alert("Update failed");
+                        }
+                      }}
+                    >
+                      Update
+                    </button>
+
+                    <button
+                      className="delete-btn"
+                      onClick={async () => {
+                        try {
+                          await axios.delete(`${API_URL}/blogs/${blog._id}`);
+                          alert("Blog Deleted");
+                          getBlogs();
+                        } catch (error) {
+                          alert("Delete failed");
+                        }
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
               </div>
-
-              <div className="buttons">
-                <button
-                  className="like-btn"
-                  onClick={async () => {
-                    const userId = prompt("Enter your User ID");
-
-                    try {
-                      await axios.put(`${API_URL}/blogs/${blog._id}/like`, {
-                        userId
-                      });
-
-                      getBlogs();
-                    } catch (error) {
-                      alert("Like failed");
-                    }
-                  }}
-                >
-                  Like
-                </button>
-
-                <button
-                  className="update-btn"
-                  onClick={async () => {
-                    const newTitle = prompt("Enter new title");
-                    const newDescription = prompt("Enter new description");
-
-                    try {
-                      await axios.put(`${API_URL}/blogs/${blog._id}`, {
-                        title: newTitle,
-                        description: newDescription
-                      });
-
-                      alert("Blog Updated");
-                      getBlogs();
-                    } catch (error) {
-                      alert("Update failed");
-                    }
-                  }}
-                >
-                  Update
-                </button>
-
-                <button
-                  className="delete-btn"
-                  onClick={async () => {
-                    try {
-                      await axios.delete(`${API_URL}/blogs/${blog._id}`);
-
-                      alert("Blog Deleted");
-                      getBlogs();
-                    } catch (error) {
-                      alert("Delete failed");
-                    }
-                  }}
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
       </section>
+
+      <footer className="footer">
+        <p>Developed by Dhanvi Dhingra | CareerCoded Internship Project</p>
+      </footer>
     </div>
   );
 }
