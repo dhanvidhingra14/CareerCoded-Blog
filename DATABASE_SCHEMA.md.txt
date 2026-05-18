@@ -1,0 +1,72 @@
+# Database Schema Diagram
+
+## User Schema
+
+```js
+{
+  name: String,
+  email: String,
+  password: String,
+  role: String,
+  likedBlogs: [ObjectId]
+}
+```
+
+---
+
+## Blog Schema
+
+```js
+{
+  title: String,
+  thumbnail: String,
+  description: String,
+  content: String,
+  author: String,
+  category: String,
+  tags: [String],
+  likes: [ObjectId],
+  createdAt: Date
+}
+```
+
+---
+
+# Relationship Diagram
+
+```text
++-------------------+
+|       User        |
++-------------------+
+| _id               |
+| name              |
+| email             |
+| password          |
+| role              |
+| likedBlogs[]      |
++-------------------+
+          |
+          | likes
+          |
+          V
++-------------------+
+|       Blog        |
++-------------------+
+| _id               |
+| title             |
+| thumbnail         |
+| description       |
+| content           |
+| author            |
+| category          |
+| tags[]            |
+| likes[]           |
+| createdAt         |
++-------------------+
+```
+
+---
+
+# Database Used
+
+MongoDB Atlas was used as the cloud database service for this project.

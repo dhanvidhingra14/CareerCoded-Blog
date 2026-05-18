@@ -1,0 +1,229 @@
+# API Documentation
+
+## Base URL
+
+```bash
+http://localhost:5000/api
+```
+
+---
+
+# Authentication APIs
+
+## Register User
+
+### Endpoint
+
+```bash
+POST /auth/register
+```
+
+### Request Body
+
+```json
+{
+  "name": "Dhanvi",
+  "email": "dhanvi@gmail.com",
+  "password": "123456"
+}
+```
+
+### Response
+
+```json
+{
+  "message": "User Registered Successfully"
+}
+```
+
+---
+
+# Login User
+
+### Endpoint
+
+```bash
+POST /auth/login
+```
+
+### Request Body
+
+```json
+{
+  "email": "dhanvi@gmail.com",
+  "password": "123456"
+}
+```
+
+### Response
+
+```json
+{
+  "message": "Login Successful",
+  "token": "JWT_TOKEN"
+}
+```
+
+---
+
+# Blog APIs
+
+## Get All Blogs
+
+### Endpoint
+
+```bash
+GET /blogs
+```
+
+### Response
+
+```json
+[
+  {
+    "_id": "BLOG_ID",
+    "title": "My Blog",
+    "description": "Blog Description"
+  }
+]
+```
+
+---
+
+# Get Single Blog
+
+### Endpoint
+
+```bash
+GET /blogs/:id
+```
+
+### Example
+
+```bash
+GET /blogs/123456
+```
+
+---
+
+# Create Blog
+
+### Endpoint
+
+```bash
+POST /blogs
+```
+
+### Request Body
+
+```json
+{
+  "title": "My First Blog",
+  "thumbnail": "image.jpg",
+  "description": "Blog Description",
+  "content": "Blog Content",
+  "author": "Dhanvi",
+  "category": "Technology",
+  "tags": ["tech", "coding"]
+}
+```
+
+### Response
+
+```json
+{
+  "message": "Blog Created Successfully"
+}
+```
+
+---
+
+# Update Blog
+
+### Endpoint
+
+```bash
+PUT /blogs/:id
+```
+
+### Request Body
+
+```json
+{
+  "title": "Updated Blog",
+  "description": "Updated Description"
+}
+```
+
+---
+
+# Delete Blog
+
+### Endpoint
+
+```bash
+DELETE /blogs/:id
+```
+
+---
+
+# Like Blog
+
+### Endpoint
+
+```bash
+PUT /blogs/:id/like
+```
+
+### Request Body
+
+```json
+{
+  "userId": "USER_ID"
+}
+```
+
+---
+
+# Unlike Blog
+
+### Endpoint
+
+```bash
+PUT /blogs/:id/unlike
+```
+
+### Request Body
+
+```json
+{
+  "userId": "USER_ID"
+}
+```
+
+---
+
+# Technologies Used
+
+- React.js
+- Node.js
+- Express.js
+- MongoDB
+- Axios
+- JWT Authentication
+- bcryptjs
+
+---
+
+# Testing Tool
+
+API testing was performed using:
+
+- Thunder Client
+- Postman
+
+---
+
+# Author
+
+Dhanvi Dhingra
