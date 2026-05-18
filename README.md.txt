@@ -192,7 +192,3 @@ JWT_SECRET=your_secret_key
 Dhanvi Dhingra
 
 ---
-
-# Internship Assignment
-
-This project was developed as part of the CareerCoded Internship Assignment Test.
